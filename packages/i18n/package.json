@@ -1,0 +1,14 @@
+{
+  "name": "@repo/i18n",
+  "version": "1.0.0",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+  },
+  "devDependencies": {
+    "@repo/utils": "*",
+    "@repo/store": "*"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "auth": {
+    "login": {
+      "title": "Login Page",
+      "greeting": "Hello {{name}}, congratulations on your successful login!"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@repo/utils",
+  "version": "1.0.0",
+  "license": "MIT",
+  "exports": {
+    "./*": "./*/index.ts",
+    "./constant": "./constant.ts"
+  },
+  "scripts": {
+  },
+  "devDependencies": {
+    "@repo/types": "*"
+  }
+}

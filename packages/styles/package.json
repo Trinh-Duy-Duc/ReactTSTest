@@ -1,0 +1,11 @@
+{
+  "name": "@repo/styles",
+  "version": "1.0.0",
+  "license": "MIT",
+  "exports": {
+    "./global-config": "./src/global-config.scss"
+  },
+  "scripts": {
+    
+  }
+}
