@@ -1,0 +1,8 @@
+{
+  "auth": {
+    "login": {
+      "title": "Trang đăng nhập",
+      "greeting": "Xin chào {{name}}, chúc mừng bạn đã đăng nhập thành công!"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "@repo/services",
+  "version": "1.0.0",
+  "license": "MIT",
+  "exports": {
+    "./api/*": "./src/api/*/index.ts"
+  },
+  "scripts": {
+  }
+}
