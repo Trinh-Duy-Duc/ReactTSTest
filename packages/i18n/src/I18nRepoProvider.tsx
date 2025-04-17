@@ -3,12 +3,9 @@ import { I18nextProvider, initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
 import { useI18nStore } from '@repo/store/i18n';
 import REPO_CONSTANT from '@repo/utils/constant';
+import LanguageDetector from 'i18next-browser-languagedetector';
 
-export function I18nRepoProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function I18nRepoProvider({ children }: { children: React.ReactNode }) {
   const { lang, paths } = useI18nStore();
   const [initialized, setInitialized] = useState(false);
 
@@ -27,9 +24,10 @@ export function I18nRepoProvider({
         };
 
         await i18n
+          .use(LanguageDetector)
           .use(initReactI18next)
           .init({
-            fallbackLng: 'en',
+            fallbackLng: REPO_CONSTANT.DEFAUL_VALUES.language,
             interpolation: {
               escapeValue: false,
             },
@@ -41,6 +39,12 @@ export function I18nRepoProvider({
             },
             defaultNS: REPO_CONSTANT.TRANS_KEYS.common,
             ns: [REPO_CONSTANT.TRANS_KEYS.common],
+            detection: {
+              order: ['cookie', 'localStorage', 'navigator'],
+              lookupCookie: REPO_CONSTANT.COOKIE_KEYS.lang,
+              caches: ['cookie'],       // <-- i18next sẽ tự động ghi cookie
+              cookieMinutes: 60 * 24 * 30,
+            },
           });
         setInitialized(true);
       } catch (error) {
@@ -56,23 +60,20 @@ export function I18nRepoProvider({
     if (!initialized) return;
     const load = async () => {
       try {
-        const [source1, source2] = await Promise.all([
-          import(paths[lang]),
-          import(`../lang/${lang}.json`),
-        ]);
-        const mergedResource = {
-          ...source1.default,
-          ...source2.default,
-        };
-        // Thêm resource vào namespace 'common', deep merge để đảm bảo nội dung cũ không bị mất nếu có
-        i18n.addResourceBundle(
-          lang,
-          REPO_CONSTANT.TRANS_KEYS.common,
-          mergedResource,
-          true, // deep merge
-          true  // overwrite existing
-        );
-        await i18n.changeLanguage(lang);
+        if(!i18n.hasResourceBundle(lang, REPO_CONSTANT.TRANS_KEYS.common)){
+          const [source1, source2] = await Promise.all([import(paths[lang]),import(`../lang/${lang}.json`)]);
+          const mergedResource = { ...source1.default, ...source2.default };
+          // Thêm resource vào namespace 'common', deep merge để đảm bảo nội dung cũ không bị mất nếu có
+          i18n.addResourceBundle(
+            lang,
+            REPO_CONSTANT.TRANS_KEYS.common,
+            mergedResource,
+            true, // deep merge
+            true  // overwrite existing
+          );
+        }
+
+        i18n.changeLanguage(lang);
       } catch (error) {
         console.error('Error while switching language:', error);
       }
