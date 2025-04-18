@@ -12,6 +12,9 @@ const TRANS_KEYS = {
 const LOCALSTORAGE_KEYS = {
     auth: 'auth-storage'
 }
+const COOKIE_KEYS = {
+    lang: 'lang'
+}
 
 const TOAST_CONFIGS = {
     position: "top-right" as ToastPosition,
@@ -20,7 +23,7 @@ const TOAST_CONFIGS = {
 
 
 const REPO_CONSTANT = {
-    DEFAUL_VALUES, TRANS_KEYS, LOCALSTORAGE_KEYS, TOAST_CONFIGS
+    DEFAUL_VALUES, TRANS_KEYS, LOCALSTORAGE_KEYS, COOKIE_KEYS, TOAST_CONFIGS
 }
 
 export default REPO_CONSTANT;
