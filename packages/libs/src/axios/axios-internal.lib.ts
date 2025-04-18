@@ -2,7 +2,8 @@ import { envRepo } from '@repo/env';
 import { ResponseBase } from '@repo/types/base';
 import axios, { AxiosRequestConfig } from 'axios';
 
-const _repoAxiosInternal = axios.create({
+
+const repoAxiosInternalInstance = axios.create({
     baseURL: envRepo.VITE_BACKEND_API_ENDPOINT,
 });
 
@@ -24,24 +25,24 @@ const _repoAxiosInternal = axios.create({
 // );
 
 const _get = async <T>(path: string, config?: AxiosRequestConfig) => {
-    const resp = await _repoAxiosInternal.get<ResponseBase<T>>(path, config);
+    const resp = await repoAxiosInternalInstance.get<ResponseBase<T>>(path, config);
     return resp.data;
 }
 const _post = async <T>(path: string, body: any, config?: AxiosRequestConfig) => {
-    const resp = await _repoAxiosInternal.post<ResponseBase<T>>(path, body, config);
+    const resp = await repoAxiosInternalInstance.post<ResponseBase<T>>(path, body, config);
     return resp.data;
 }
 const _put = async <T>(path: string, body: any, config?: AxiosRequestConfig) => {
-    const resp = await _repoAxiosInternal.put<ResponseBase<T>>(path, body, config);
+    const resp = await repoAxiosInternalInstance.put<ResponseBase<T>>(path, body, config);
     return resp.data;
 }
 const _delete = async <T>(path: string, config?: AxiosRequestConfig) => {
-    const resp = await _repoAxiosInternal.delete<ResponseBase<T>>(path, config);
+    const resp = await repoAxiosInternalInstance.delete<ResponseBase<T>>(path, config);
     return resp.data;
 }
 
-const repoAxiosInternal = {
+const repoAxiosInternalMethod = {
     _get, _post, _put, _delete
 }
 
-export { repoAxiosInternal };
+export { repoAxiosInternalInstance, repoAxiosInternalMethod };

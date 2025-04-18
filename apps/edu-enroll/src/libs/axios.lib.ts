@@ -1,28 +1,10 @@
-import env from '@edu-enroll/services/env.service';
-import { useAuthStore } from '@repo/store/auth';
-import axios from 'axios';
+import { repoAxiosInternalMethod, repoAxiosInternalInstance } from '@repo/libs';
 
-export const axiosInstance = axios.create({
-    baseURL: env.VITE_BACKEND_API_ENDPOINT,
-});
+repoAxiosInternalInstance.interceptors.request.use();
+repoAxiosInternalInstance.interceptors.response.use();
 
-// Thêm auth token vào mỗi request
-axiosInstance.interceptors.request.use((config) => {
-  const _accessToken = useAuthStore.getState().accessToken;
-  if (_accessToken) {
-    config.headers.Authorization = `Bearer ${_accessToken}`;
-  }
-  return config;
-});
-  
-// Xử lý lỗi global
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      // refresh token hoặc logout
-      useAuthStore.getState().clearAuth();
-    }
-    return Promise.reject(error);
-  }
-);
+const eeAxiosInstance = {
+  ... repoAxiosInternalMethod
+}
+
+export { eeAxiosInstance };
