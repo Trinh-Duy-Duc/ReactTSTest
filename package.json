@@ -8,6 +8,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "eslint": "^8.57.0",
     "prettier": "^3.2.5",
     "turbo": "^2.5.0"
@@ -27,6 +28,7 @@
     "dayjs": "^1.11.13",
     "i18next": "^24.2.3",
     "i18next-browser-languagedetector": "^8.0.4",
+    "js-cookie": "^3.0.5",
     "path": "^0.12.7",
     "react-hook-form": "^7.55.0",
     "react-i18next": "^15.4.1",

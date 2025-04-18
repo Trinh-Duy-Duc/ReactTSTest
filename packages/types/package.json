@@ -5,7 +5,7 @@
   "exports": {
     "./api": "./api/index.ts",
     "./base": "./base/index.ts",
-    "./domain/**": "./domain/**/index.ts",
+    "./domain": "./domain/index.ts",
     "./enum": "./enum/index.ts",
     "./ui/**/*": "./ui/**/*/index.ts"
   },

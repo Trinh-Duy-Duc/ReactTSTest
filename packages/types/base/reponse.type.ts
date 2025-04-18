@@ -4,6 +4,6 @@ type ResponseBase<T> = {
     message: string;
 }
 
-export {
+export type {
     ResponseBase
 }

@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import { useI18nStore } from '@repo/store/i18n';
 import { useEffect, useState } from 'react';
 import { LanguageCode } from '@repo/types/enum';
+import { AuthWrapper } from '@repo/ui/wrapper';
 
 
 const Root = () => {
@@ -33,8 +34,10 @@ const Root = () => {
 
     return (
         <ConfigProvider locale={antdLocale}>
-            <AppRoutes />
-            <ToastifyBasic />
+            <AuthWrapper>
+                <AppRoutes />
+                <ToastifyBasic />
+            </AuthWrapper>
         </ConfigProvider>
     )
 }

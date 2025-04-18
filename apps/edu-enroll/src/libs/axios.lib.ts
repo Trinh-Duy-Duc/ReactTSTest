@@ -8,11 +8,11 @@ export const axiosInstance = axios.create({
 
 // Thêm auth token vào mỗi request
 axiosInstance.interceptors.request.use((config) => {
-    const _accessToken = useAuthStore.getState().accessToken;
-    if (_accessToken) {
-      config.headers.Authorization = `Bearer ${_accessToken}`;
-    }
-    return config;
+  const _accessToken = useAuthStore.getState().accessToken;
+  if (_accessToken) {
+    config.headers.Authorization = `Bearer ${_accessToken}`;
+  }
+  return config;
 });
   
 // Xử lý lỗi global

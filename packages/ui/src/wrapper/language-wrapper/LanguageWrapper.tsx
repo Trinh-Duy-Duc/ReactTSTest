@@ -6,7 +6,7 @@ import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
 const allowedLangs = [LanguageCode.English, LanguageCode.VietNam]; // Danh sách các ngôn ngữ cho phép
 
-export default function LanguageWrapper() {
+export function LanguageWrapper() {
   // Lấy param lang từ URL, ví dụ: "en" hoặc "vi"
   const { lang } = useParams<{ lang: LanguageCode }>();
   const { setLang } = useI18nStore();

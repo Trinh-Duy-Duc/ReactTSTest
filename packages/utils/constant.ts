@@ -13,7 +13,9 @@ const LOCALSTORAGE_KEYS = {
     auth: 'auth-storage'
 }
 const COOKIE_KEYS = {
-    lang: 'lang'
+    lang: 'lang',
+    accessToken: 'accessToken',
+    refreshToken: 'refreshToken'
 }
 
 const TOAST_CONFIGS = {
