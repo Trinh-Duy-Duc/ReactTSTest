@@ -6,6 +6,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ButtonBasic } from '@repo/ui/antd-ui';
 import { Button, DatePicker } from 'antd';
 import { useToastify } from "@repo/store/toastify";
+import { usePaginationParams } from "@repo/hooks";
+import { useEffect } from "react";
+
 const Login = () => {
   const { t } = useTranslation(EE_CONSTANT.TRANS_KEYS.common, { keyPrefix: EE_CONSTANT.TRAN_KEYS_PREFIX.login } );
   const { t: t2 } = useTranslation(EE_CONSTANT.TRANS_KEYS.common);
@@ -13,6 +16,11 @@ const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { showToast } = useToastify();
+  const { pageIndex, pageSize, setPageIndex, setPageSize } = usePaginationParams({ defaultPageIndex: 1, defaultPageSize: 50 });
+
+  useEffect(() => {
+    console.log('init')
+  }, [pageIndex, pageSize])
 
   const changeLang = () => {
     const newLang = lang === LanguageCode.English ? LanguageCode.VietNam :  LanguageCode.English;
@@ -43,6 +51,8 @@ const Login = () => {
           <ButtonBasic></ButtonBasic>
           <Button type="primary" onClick={handleDynamicTrans}>New</Button>
           <button onClick={changeLang}>change</button>
+          <button onClick={() => setPageIndex(pageIndex + 1)} >change page index</button>
+          <button onClick={() => setPageSize(pageSize + 50)} >change page size</button>
         </div>
       </div>
     </div>

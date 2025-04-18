@@ -22,12 +22,12 @@
     "dev": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@types/react": "^19.0.1",
-    "@types/react-dom": "^19.0.2",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "@repo/store": "*",
