@@ -1,0 +1,21 @@
+{
+  "name": "@repo/types",
+  "version": "1.0.0",
+  "license": "MIT",
+  "exports": {
+    "./api": "./api/index.ts",
+    "./base": "./base/index.ts",
+    "./domain": "./domain/index.ts",
+    "./enum": "./enum/index.ts",
+    "./ui/**/*": "./ui/**/*/index.ts"
+  },
+  "scripts": {
+    
+  },
+  "dependencies": {
+
+  },
+  "devDependencies": {
+    
+  }
+}

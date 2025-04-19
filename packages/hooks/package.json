@@ -1,0 +1,17 @@
+{
+  "name": "@repo/hooks",
+  "version": "1.0.0",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    
+  },
+  "dependencies": {
+    "react-router-dom": "^7.5.0"
+  },
+  "devDependencies": {
+
+  }
+}

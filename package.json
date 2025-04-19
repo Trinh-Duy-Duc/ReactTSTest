@@ -1,0 +1,41 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "dev:edu-enroll": "npx turbo run dev --filter=packages/* & turbo run dev --filter=edu-enroll",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
+    "turbo": "^2.5.0"
+  },
+  "name": "ems-monorepo",
+  "packageManager": "npm@11.2.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@hookform/resolvers": "^5.0.1",
+    "antd": "^5.24.7",
+    "autoprefixer": "^10.4.20",
+    "axios": "^1.8.4",
+    "dayjs": "^1.11.13",
+    "i18next": "^24.2.3",
+    "i18next-browser-languagedetector": "^8.0.4",
+    "js-cookie": "^3.0.5",
+    "path": "^0.12.7",
+    "react-hook-form": "^7.55.0",
+    "react-i18next": "^15.4.1",
+    "react-router-dom": "^7.5.0",
+    "react-toastify": "^11.0.5",
+    "sass": "^1.86.3",
+    "tailwindcss": "^3.4.17",
+    "zustand": "^5.0.3"
+  }
+}

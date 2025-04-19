@@ -1,0 +1,42 @@
+{
+  "name": "@repo/ui",
+  "version": "0.0.0",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "./styles.css": "./dist/index.css",
+    "./general-ui": "./src/general-ui/index.ts",
+    "./antd-ui": "./src/antd-ui/index.ts",
+    "./shadcn-ui": "./src/shadcn-ui/index.ts",
+    "./wrapper": "./src/wrapper/index.ts"
+  },
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint \"**/*.ts\"",
+    "build": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
+    "check-types": "tsc --noEmit",
+    "dev": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "@repo/store": "*",
+    "@repo/types": "*",
+    "@repo/utils": "*",
+    "eslint": "^8.57.0",
+    "typescript": "5.5.4",
+    "postcss": "^8.5.3",
+    "autoprefixer": "^10.4.20",
+    "tailwindcss": "^3.4.17"
+  }
+}

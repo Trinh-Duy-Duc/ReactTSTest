@@ -1,0 +1,15 @@
+{
+  "name": "@repo/store",
+  "version": "1.0.0",
+  "license": "MIT",
+  "exports": {
+    "./*": "./src/*/index.ts"
+  },
+  "scripts": {
+  },
+  "devDependencies": {
+    "@repo/types": "*",
+    "@repo/utils": "*",
+    "@repo/services": "*"
+  }
+}
