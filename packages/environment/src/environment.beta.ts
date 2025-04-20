@@ -1,6 +1,5 @@
 const envBeta = {
-    VITE_BACKEND_ENDPOINT: "localhost:5002",
-    VITE_BACKEND_API_ENDPOINT: "localhost:5002/api",
+    VITE_BACKEND_ENDPOINT: "https://gw-edux-beta.mongvo.com"
 }
 
 export default envBeta;

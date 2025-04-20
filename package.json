@@ -4,6 +4,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "dev:edu-enroll": "npx turbo run dev --filter=packages/* & turbo run dev --filter=edu-enroll",
+    "build:edu-enroll-beta": "NODE_ENV=beta & npx turbo run build --filter=edu-enroll",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },

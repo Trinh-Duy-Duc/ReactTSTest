@@ -9,6 +9,12 @@ import Cookies from 'js-cookie';
 
 const { COOKIE_KEYS, LOCALSTORAGE_KEYS } = REPO_CONSTANT;
 
+const setTokenToCookie = (body: LoginResponse) => {
+  const { accessToken, accessTokenExpired, refreshToken, refreshTokenExpired } = body;
+  Cookies.set(COOKIE_KEYS.accessToken, accessToken, { expires: 1 });
+  Cookies.set(COOKIE_KEYS.refreshToken, refreshToken, { expires: 7 });
+}
+
 const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
@@ -32,25 +38,44 @@ const useAuthStore = create<AuthState>()(
         // call api
         try{
           const resp = await repoAuthApi.loginApi(body);
-          const { accessToken, refreshToken, user } = resp.data;
+          const { accessToken, refreshToken, accessTokenExpired, refreshTokenExpired } = resp.data;
 
-          Cookies.set(COOKIE_KEYS.accessToken, accessToken, { expires: 1 });
-          Cookies.set(COOKIE_KEYS.refreshToken, refreshToken, { expires: 7 });
+          setTokenToCookie(resp.data);
 
-          set({ accessToken, refreshToken, user, isAuthenticated: true });
+          set({ accessToken, refreshToken, isAuthenticated: true });
+          get().getUserInfo();
 
           if(callback){
             callback(resp);
           }
         }catch(err){
           // handle error
+          get().logout();
+        }
+      },
+      handleRefreshToken: async () =>{
+        const { refreshToken, logout } = get();
+        if(!refreshToken){
+          logout();
+          return;
+        }
+        try{
+          const resp = await repoAuthApi.refreshTokenApi(refreshToken);
+          const { accessToken, refreshToken: _refreshToken } = resp.data;
+
+          setTokenToCookie(resp.data);
+
+          set({ accessToken, refreshToken: _refreshToken, isAuthenticated: true });
+        }catch{
+          // handle error
+          logout();
         }
       },
       getUserInfo: async () => {
         try {
           const resp = await repoAuthApi.userInfoApi();
           
-          set({ user: resp.data.user, isAuthenticated: true });
+          set({ user: resp.data, isAuthenticated: true });
         } catch (error) {
           get().logout();
         }
