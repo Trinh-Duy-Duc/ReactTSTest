@@ -8,8 +8,8 @@ import REPO_CONSTANT from '@repo/utils/constant';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import Root from './Root.tsx';
-
+import Root from './Root.tsx';   
+    
 const viURL = new URL(`./assets/locales/${LanguageCode.VietNam}.json`, import.meta.url).href;
 const enURL = new URL(`./assets/locales/${LanguageCode.English}.json`, import.meta.url).href;
 
@@ -19,7 +19,7 @@ useI18nStore.setState({
     [LanguageCode.VietNam]: viURL,
     [LanguageCode.English]: enURL
   }
-});
+}); 
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

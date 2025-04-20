@@ -9,18 +9,23 @@ export function I18nRepoProvider({ children }: { children: React.ReactNode }) {
   const { lang, paths } = useI18nStore();
   const [initialized, setInitialized] = useState(false);
 
-  // Khởi tạo i18next khi component mount (cho ngôn ngữ mặc định)
+  // ✅ Fetch JSON thay vì import (tránh lỗi MIME)
+  const fetchLangData = async (path: string): Promise<any> => {
+    const res = await fetch(path);
+    return await res.json();
+  };
+
   useEffect(() => {
     const load = async () => {
       try {
         const [source1, source2] = await Promise.all([
-          import(paths[lang]), // file JSON thứ nhất
-          import(`../lang/${lang}.json`), // file JSON thứ hai
+          fetchLangData(paths[lang]),                  // từ path mapping
+          fetchLangData(`/i18n/${lang}.json`)          // từ public folder
         ]);
-        // Giả sử file JSON được export dưới dạng default export
+
         const mergedResource = {
-          ...source1.default,
-          ...source2.default,
+          ...source1,
+          ...source2,
         };
 
         await i18n
@@ -28,10 +33,7 @@ export function I18nRepoProvider({ children }: { children: React.ReactNode }) {
           .use(initReactI18next)
           .init({
             fallbackLng: REPO_CONSTANT.DEFAUL_VALUES.language,
-            interpolation: {
-              escapeValue: false,
-            },
-            // Thêm resource cho cùng 1 namespace chung (ví dụ: 'common')
+            interpolation: { escapeValue: false },
             resources: {
               [lang]: {
                 [REPO_CONSTANT.TRANS_KEYS.common]: mergedResource,
@@ -42,10 +44,11 @@ export function I18nRepoProvider({ children }: { children: React.ReactNode }) {
             detection: {
               order: ['cookie', 'localStorage', 'navigator'],
               lookupCookie: REPO_CONSTANT.COOKIE_KEYS.lang,
-              caches: ['cookie'],       // <-- i18next sẽ tự động ghi cookie
+              caches: ['cookie'],
               cookieMinutes: 60 * 24 * 30,
             },
           });
+
         setInitialized(true);
       } catch (error) {
         console.error('Error during i18n init:', error);
@@ -53,23 +56,31 @@ export function I18nRepoProvider({ children }: { children: React.ReactNode }) {
     };
 
     load();
-  }, []); // Giả sử lang, paths là giá trị ổn định khi mount
+  }, []);
 
-  // Khi lang thay đổi, cập nhật resource và chuyển ngôn ngữ
+  // ✅ Khi lang thay đổi
   useEffect(() => {
     if (!initialized) return;
+
     const load = async () => {
       try {
-        if(!i18n.hasResourceBundle(lang, REPO_CONSTANT.TRANS_KEYS.common)){
-          const [source1, source2] = await Promise.all([import(paths[lang]),import(`../lang/${lang}.json`)]);
-          const mergedResource = { ...source1.default, ...source2.default };
-          // Thêm resource vào namespace 'common', deep merge để đảm bảo nội dung cũ không bị mất nếu có
+        if (!i18n.hasResourceBundle(lang, REPO_CONSTANT.TRANS_KEYS.common)) {
+          const [source1, source2] = await Promise.all([
+            fetchLangData(paths[lang]),
+            fetchLangData(`/i18n/${lang}.json`)
+          ]);
+
+          const mergedResource = {
+            ...source1,
+            ...source2,
+          };
+
           i18n.addResourceBundle(
             lang,
             REPO_CONSTANT.TRANS_KEYS.common,
             mergedResource,
-            true, // deep merge
-            true  // overwrite existing
+            true,
+            true
           );
         }
 
@@ -86,7 +97,5 @@ export function I18nRepoProvider({ children }: { children: React.ReactNode }) {
     return <div>Loading translations...</div>;
   }
 
-  return (
-    <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
-  );
+  return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 }
