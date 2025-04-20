@@ -40,5 +40,4 @@ build_and_deploy:
     - npm run build:$CHANGED_APP
     - echo "🚀 Deploying $CHANGED_APP..."
     - ssh -i $SSH_KEY_PATH $DEPLOY_USER@$DEPLOY_SERVER "mkdir -p $DEPLOY_BASE_PATH/$CHANGED_APP"
-    - scp -i $SSH_KEY_PATH -r apps/$CHANGED_APP/dist/* $DEPLOY_USER@$DEPLOY_SERVER:$DEPLOY_BASE_PATH/$CHANGED_APP
-    - ssh -i $SSH_KEY_PATH $DEPLOY_USER@$DEPLOY_SERVER "systemctl restart ${CHANGED_APP}-service"
+    - scp -i $SSH_KEY_PATH -r apps/$CHANGED_APP/dist/* $DEPLOY_USER@$DEPLOY_SERVER:$DEPLOY_BASE_PATH/$CHANGED_APP 
