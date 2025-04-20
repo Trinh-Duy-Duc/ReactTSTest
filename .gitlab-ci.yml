@@ -20,7 +20,7 @@ before_script:
   - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
 
 build_and_deploy:
-  stage: build_and_deploy
+  stage: build_and_deploy 
   image: node:20
   only:
     - beta
@@ -46,5 +46,5 @@ build_and_deploy:
     - echo "🚀 Deploying $CHANGED_APP..."
     - ssh -i $SSH_KEY_PATH $DEPLOY_USER@$DEPLOY_SERVER "mkdir -p $DEPLOY_BASE_PATH/$CHANGED_APP"
     - scp -i $SSH_KEY_PATH -r apps/$CHANGED_APP/dist/* $DEPLOY_USER@$DEPLOY_SERVER:$DEPLOY_BASE_PATH/$CHANGED_APP 
-  # 🟢 👇 Tên job hiển thị cụ thể app
-  name: "build_and_deploy: $CI_COMMIT_BRANCH ($CI_COMMIT_SHORT_SHA) - $CHANGED_APP"
+    # 🟢 👇 Tên job hiển thị cụ thể app
+  
