@@ -19,7 +19,7 @@ useI18nStore.setState({
     [LanguageCode.VietNam]: viURL,
     [LanguageCode.English]: enURL
   }
-});
+}); 
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
