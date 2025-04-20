@@ -29,7 +29,7 @@ build_and_deploy:
   script:
     - echo "🧠 Detecting changed app..."
     - |
-      CHANGED_APP=$(git diff --name-only origin/main...HEAD | grep '^apps/' | cut -d '/' -f 2 | sort | uniq | head -n 1)
+      CHANGED_APP=$(git diff --name-only HEAD~1 | grep '^apps/' | cut -d '/' -f 2 | sort | uniq | head -n 1)
       echo "📦 Changed app: $CHANGED_APP"
       if [ -z "$CHANGED_APP" ]; then
         echo "❌ No app changed, skipping..."

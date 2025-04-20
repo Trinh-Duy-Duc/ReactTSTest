@@ -1,7 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build", 
+    "build:edu-enroll": "turbo run build --filter=edu-enroll",
     "dev": "turbo run dev",
     "dev:edu-enroll": "npx turbo run dev --filter=packages/* & turbo run dev --filter=edu-enroll",
     "lint": "turbo run lint",
