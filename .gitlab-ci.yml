@@ -36,10 +36,6 @@ build_and_deploy:
         exit 0
       fi
 
-    - echo "📦 Installing dependencies..."
-    - npm install --legacy-peer-deps
-    - npm install -g mkdirp cpx
- 
     - echo "📂 Copying i18n files to public folder..."
     - mkdir -p apps/$CHANGED_APP/public/i18n
     - npx cpx "packages/i18n/lang/*.json" apps/$CHANGED_APP/public/i18n/
