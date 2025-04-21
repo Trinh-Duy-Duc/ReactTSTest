@@ -8,6 +8,7 @@ import { Button, DatePicker } from 'antd';
 import { useToastify } from "@repo/store/toastify";
 import { usePaginationParams } from "@repo/hooks";
 import { useEffect } from "react";
+import { useAuthStore } from "@repo/store/auth";
 
 const Login = () => {
   const { t } = useTranslation(EE_CONSTANT.TRANS_KEYS.common, { keyPrefix: EE_CONSTANT.TRAN_KEYS_PREFIX.login } );
@@ -17,6 +18,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { showToast } = useToastify();
   const { pageIndex, pageSize, setPageIndex, setPageSize } = usePaginationParams({ defaultPageIndex: 1, defaultPageSize: 50 });
+  const { login, handleRefreshToken } = useAuthStore();
 
   useEffect(() => {
     console.log('init')
@@ -37,6 +39,16 @@ const Login = () => {
     showToast('success', t('greeting', { name: 'John' } ))
   }
 
+  const handleTestLogin = () =>{
+    login({ userNameOrEmail: 'string', password: 'string' }, () =>{
+      showToast("success", 'Login Success')
+    })
+  }
+
+  const handleTestRefreshToken = () =>{
+    handleRefreshToken();
+  }
+
   return (
     <div>
       <div className="flex justify-center items-center">
@@ -53,6 +65,8 @@ const Login = () => {
           <button onClick={changeLang}>change</button>
           <button onClick={() => setPageIndex(pageIndex + 1)} >change page index</button>
           <button onClick={() => setPageSize(pageSize + 50)} >change page size</button>
+          <button onClick={handleTestLogin} >test login</button>
+          <button onClick={handleTestRefreshToken} >test refresh token</button>
         </div>
       </div>
     </div>

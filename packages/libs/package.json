@@ -8,6 +8,7 @@
   "scripts": {
   },
   "devDependencies": {
-    "@repo/env": "*"
+    "@repo/env": "*",
+    "@repo/store": "*"
   }
 }

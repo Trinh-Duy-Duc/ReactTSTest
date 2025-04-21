@@ -1,6 +1,54 @@
 type User = {
-    username: string;
-    fullname: string;
+    fullName: string
+    defLanguage: string
+    defHotelId: number
+    firstName: any
+    isDisable: any
+    lastName: any
+    sex: any
+    address: any
+    telephone: any
+    cellphone: any
+    countryId: any
+    cityId: any
+    wardId: any
+    birthday: any
+    ip: any
+    created: any
+    updated: any
+    latestLogin: any
+    totalLogin: any
+    amountCoin: any
+    from: any
+    note: any
+    userAgent: any
+    isDeleted: boolean
+    flag: number
+    beginFlag: any
+    percentDiscount: any
+    facebookId: any
+    appleId: any
+    googleId: any
+    confirmToken: any
+    userId: any
+    avatarLink: any
+    aspNetUserClaims: Array<any>
+    roles: Array<any>
+    id: string
+    userName: string
+    normalizedUserName: string
+    email: string
+    normalizedEmail: string
+    emailConfirmed: boolean
+    passwordHash: any
+    securityStamp: any
+    concurrencyStamp: string
+    phoneNumber: string
+    phoneNumberConfirmed: boolean
+    twoFactorEnabled: boolean
+    lockoutEnd: any
+    lockoutEnabled: boolean
+    accessFailedCount: number
 }
 
 export type { User };

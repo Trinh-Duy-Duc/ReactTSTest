@@ -1,7 +1,7 @@
 type ResponseBase<T> = {
     data: T;
     success: boolean;
-    message: string;
+    error: string;
 }
 
 export type {

@@ -9,6 +9,7 @@ type AuthState = {
     user: User | null;
     initAuth: () => void;
     login: (body: LoginBody, callback?: (result: ResponseBase<LoginResponse>) => void) => Promise<void>;
+    handleRefreshToken: () => Promise<void>;
     getUserInfo: () => Promise<void>;
     logout: () => void;
 }
