@@ -6,12 +6,11 @@ import { repoAuthApi } from '@repo/services';
 
 export function AuthWrapper({ children }: { children: React.ReactNode }) {
   // const { handleGetUserInfo } = useAuth();
-  const { accessToken, refreshToken, onSetToken, onClearAuth, onSetUser } = useAuthStore();
+  const { accessToken, onSetToken, onClearAuth, onSetUser } = useAuthStore();
   
   useEffect(() => {
     const _accessToken = authCommon.getAccessTokenFromCookie();
     const _refreshToken = authCommon.getRefreshTokenFromCookie();
-
     if(_accessToken){
       onSetToken(_accessToken, _refreshToken || '');
       // handleGetUserInfo();
@@ -20,10 +19,6 @@ export function AuthWrapper({ children }: { children: React.ReactNode }) {
       onClearAuth();
     }
   }, []);
-
-  useEffect(() => {
-    console.log('refreshToken-------', refreshToken)
-  }, [refreshToken])
 
   useEffect(() => {
     if(!accessToken) return;

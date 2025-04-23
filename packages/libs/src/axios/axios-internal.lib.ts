@@ -1,8 +1,8 @@
 import { envRepo } from '@repo/env';
-import { ResponseBase } from '@repo/types/base';
-import axios, { AxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@repo/store/auth';
+import { ResponseBase } from '@repo/types/base';
 import { LoginResponse } from '@repo/types/domain';
+import axios, { AxiosRequestConfig } from 'axios';
 
 const repoAxiosInternalInstance = axios.create({
   baseURL: envRepo.VITE_BACKEND_ENDPOINT,
@@ -32,15 +32,16 @@ axios.interceptors.response.use(
       // Kiểm tra xem có phải lỗi 401 không (token hết hạn)
       if (error.response && error.response.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
-  
+        
+        const { refreshToken, onClearAuth } = useAuthStore.getState();
         try {
           // Lấy access token mới từ refresh token
-          const _refreshTokenValue = useAuthStore.getState().refreshToken;
-          if(_refreshTokenValue){
-            const resp = await _refreshTokenApi(_refreshTokenValue);
+          if(refreshToken){
+            const resp = await _refreshTokenApi(refreshToken);
             useAuthStore().onLoginSuccess(resp.data);
           }else{
             // handle error
+            onClearAuth();
           }
           
           // Cập nhật lại access token trong header
@@ -49,6 +50,7 @@ axios.interceptors.response.use(
           // Thực hiện lại request ban đầu với access token mới
           return axios(originalRequest);
         } catch (refreshError) {
+          onClearAuth();
           // Nếu không refresh được token, có thể thực hiện logout hoặc redirect
           return Promise.reject(refreshError);
         }
@@ -57,7 +59,7 @@ axios.interceptors.response.use(
       // Nếu không phải lỗi 401 hoặc không thể refresh, trả về lỗi gốc
       return Promise.reject(error);
     }
-  );
+);
 
 // Xử lý error response
 // _axiosInternal.interceptors.response.use(
