@@ -10,7 +10,8 @@ const TRANS_KEYS = {
 }
 
 const LOCALSTORAGE_KEYS = {
-    auth: 'auth-storage'
+    auth: 'auth-storage',
+    dashboardLayout: 'dashboard-layout'
 }
 const COOKIE_KEYS = {
     lang: 'lang',

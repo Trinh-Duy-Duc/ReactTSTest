@@ -1,1 +1,1 @@
-export * from './string/string.extension';
+export * from './string';
