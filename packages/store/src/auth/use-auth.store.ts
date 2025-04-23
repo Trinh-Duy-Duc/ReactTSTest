@@ -10,12 +10,6 @@ import { dateCommon } from '@repo/utils/date';
 
 const { LOCALSTORAGE_KEYS } = REPO_CONSTANT;
 
-// const setTokenToCookie = (body: LoginResponse) => {
-//   const { accessToken, accessTokenExpired, refreshToken, refreshTokenExpired } = body;
-//   Cookies.set(COOKIE_KEYS.accessToken, accessToken, { expires: 1 });
-//   Cookies.set(COOKIE_KEYS.refreshToken, refreshToken, { expires: 7 });
-// }
-
 const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
@@ -32,77 +26,15 @@ const useAuthStore = create<AuthState>()(
       },
       onLoginSuccess: (response: LoginResponse) => {
         const { accessToken, refreshToken } = response;
-        set({ accessToken, refreshToken, isAuthenticated: true });
+        set({ accessToken, refreshToken });
         authCommon.setTokenToCookie(response);
       },
       onClearAuth: () => set({ accessToken: null, refreshToken: null, isAuthenticated: false, user: null }),
       onSetUser: (user: User) => set({ user, isAuthenticated: true }),
-      // initAuth: () => {
-      //   const _accessToken = Cookies.get(COOKIE_KEYS.accessToken);
-      //   const _refreshToken = Cookies.get(COOKIE_KEYS.refreshToken);
-
-      //   if(_accessToken){
-      //     set({ accessToken: _accessToken, refreshToken: _refreshToken });
-      //     get().getUserInfo();
-      //   }else{
-      //     Cookies.remove(COOKIE_KEYS.refreshToken);
-      //     set({ accessToken: null, refreshToken: null, user: null, isAuthenticated: false });
-      //   }
-      // },
-      // login: async (body: LoginBody, callback?: (result: ResponseBase<LoginResponse>) => void) => {
-      //   // call api
-      //   try{
-      //     const resp = await repoAuthApi.loginApi(body);
-      //     const { accessToken, refreshToken, accessTokenExpired, refreshTokenExpired } = resp.data;
-
-      //     setTokenToCookie(resp.data);
-
-      //     set({ accessToken, refreshToken, isAuthenticated: true });
-      //     get().getUserInfo();
-
-      //     if(callback){
-      //       callback(resp);
-      //     }
-      //   }catch(err){
-      //     // handle error
-      //     get().logout();
-      //   }
-      // },
-      // handleRefreshToken: async () =>{
-      //   const { refreshToken, logout } = get();
-      //   if(!refreshToken){
-      //     logout();
-      //     return;
-      //   }
-      //   try{
-      //     const resp = await repoAuthApi.refreshTokenApi(refreshToken);
-      //     const { accessToken, refreshToken: _refreshToken } = resp.data;
-
-      //     setTokenToCookie(resp.data);
-
-      //     set({ accessToken, refreshToken: _refreshToken, isAuthenticated: true });
-      //   }catch{
-      //     // handle error
-      //     logout();
-      //   }
-      // },
-      // getUserInfo: async () => {
-      //   try {
-      //     const resp = await repoAuthApi.userInfoApi();
-          
-      //     set({ user: resp.data, isAuthenticated: true });
-      //   } catch (error) {
-      //     get().logout();
-      //   }
-      // },
-      // logout: () => {
-      //   Cookies.remove(COOKIE_KEYS.accessToken);
-      //   Cookies.remove(COOKIE_KEYS.refreshToken);
-      //   set({ accessToken: null, refreshToken: null, user: null, isAuthenticated: false })
-      // }
     }),
     {
       name: LOCALSTORAGE_KEYS.auth,
+      // chỉ persistence user và isAuthenticated trong localstorage
       partialize: (state) => ({ 
         user: state.user,
         isAuthenticated: state.isAuthenticated 
