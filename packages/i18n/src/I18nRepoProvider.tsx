@@ -4,6 +4,7 @@ import i18n from 'i18next';
 import { useI18nStore } from '@repo/store/i18n';
 import REPO_CONSTANT from '@repo/utils/constant';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import { LanguageCode } from '@repo/types/enum';
 
 export function I18nRepoProvider({ children }: { children: React.ReactNode }) {
   const { lang, paths } = useI18nStore();
@@ -15,12 +16,17 @@ export function I18nRepoProvider({ children }: { children: React.ReactNode }) {
     return await res.json();
   };
 
+  const getLangPathRepo = (lang: LanguageCode) => {
+    return new URL(`../lang/${lang}.json`, import.meta.url).href;
+  }
+
   useEffect(() => {
+    // const path = import.meta.url;
     const load = async () => {
       try {
         const [source1, source2] = await Promise.all([
           fetchLangData(paths[lang]),                  // từ path mapping
-          fetchLangData(`/i18n/${lang}.json`)          // từ public folder
+          fetchLangData(getLangPathRepo(lang))          // từ public folder
         ]);
 
         const mergedResource = {
@@ -67,7 +73,7 @@ export function I18nRepoProvider({ children }: { children: React.ReactNode }) {
         if (!i18n.hasResourceBundle(lang, REPO_CONSTANT.TRANS_KEYS.common)) {
           const [source1, source2] = await Promise.all([
             fetchLangData(paths[lang]),
-            fetchLangData(`/i18n/${lang}.json`)
+            fetchLangData(getLangPathRepo(lang))
           ]);
 
           const mergedResource = {

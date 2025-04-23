@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "@repo/env": "*",
-    "@repo/store": "*"
+    "@repo/store": "*",
+    "@repo/types": "*"
   }
 }

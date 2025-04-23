@@ -23,6 +23,7 @@
     "@repo/extensions": "*",
     "@repo/ui": "*",
     "@repo/hooks": "*",
+    "@repo/services": "*",
     "@repo/typescript-config": "*",
     "@eslint/js": "^9.21.0",
     "@types/react": "^19.0.10",

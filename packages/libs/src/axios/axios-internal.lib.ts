@@ -2,9 +2,10 @@ import { envRepo } from '@repo/env';
 import { ResponseBase } from '@repo/types/base';
 import axios, { AxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@repo/store/auth';
+import { LoginResponse } from '@repo/types/domain';
 
 const repoAxiosInternalInstance = axios.create({
-    baseURL: envRepo.VITE_BACKEND_ENDPOINT,
+  baseURL: envRepo.VITE_BACKEND_ENDPOINT,
 });
 
 repoAxiosInternalInstance.interceptors.request.use(
@@ -34,7 +35,13 @@ axios.interceptors.response.use(
   
         try {
           // Lấy access token mới từ refresh token
-          await useAuthStore.getState().handleRefreshToken();
+          const _refreshTokenValue = useAuthStore.getState().refreshToken;
+          if(_refreshTokenValue){
+            const resp = await _refreshTokenApi(_refreshTokenValue);
+            useAuthStore().onLoginSuccess(resp.data);
+          }else{
+            // handle error
+          }
           
           // Cập nhật lại access token trong header
           originalRequest.headers['Authorization'] = `Bearer ${useAuthStore.getState().accessToken}`;
@@ -84,6 +91,10 @@ const _put = async <T>(path: string, body: any, config?: AxiosRequestConfig) => 
 const _delete = async <T>(path: string, config?: AxiosRequestConfig) => {
     const resp = await repoAxiosInternalInstance.delete<ResponseBase<T>>(path, config);
     return resp.data;
+}
+const _refreshTokenApi = async (refreshToken: string) => {
+  const resp = await _post<LoginResponse>(`/auth/api/Account/RefreshToken`, { refreshToken });
+  return resp;
 }
 
 const repoAxiosInternalMethod = {
