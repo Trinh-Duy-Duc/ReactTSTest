@@ -1,10 +1,11 @@
 import { envRepo } from '@repo/env';
-import { ResponseBase } from '@repo/types/base';
-import axios, { AxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@repo/store/auth';
+import { ResponseBase } from '@repo/types/base';
+import { LoginResponse } from '@repo/types/domain';
+import axios, { AxiosRequestConfig } from 'axios';
 
 const repoAxiosInternalInstance = axios.create({
-    baseURL: envRepo.VITE_BACKEND_ENDPOINT,
+  baseURL: envRepo.VITE_BACKEND_ENDPOINT,
 });
 
 repoAxiosInternalInstance.interceptors.request.use(
@@ -31,10 +32,17 @@ axios.interceptors.response.use(
       // Kiểm tra xem có phải lỗi 401 không (token hết hạn)
       if (error.response && error.response.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
-  
+        
+        const { refreshToken, onClearAuth } = useAuthStore.getState();
         try {
           // Lấy access token mới từ refresh token
-          await useAuthStore.getState().handleRefreshToken();
+          if(refreshToken){
+            const resp = await _refreshTokenApi(refreshToken);
+            useAuthStore().onLoginSuccess(resp.data);
+          }else{
+            // handle error
+            onClearAuth();
+          }
           
           // Cập nhật lại access token trong header
           originalRequest.headers['Authorization'] = `Bearer ${useAuthStore.getState().accessToken}`;
@@ -42,6 +50,7 @@ axios.interceptors.response.use(
           // Thực hiện lại request ban đầu với access token mới
           return axios(originalRequest);
         } catch (refreshError) {
+          onClearAuth();
           // Nếu không refresh được token, có thể thực hiện logout hoặc redirect
           return Promise.reject(refreshError);
         }
@@ -50,7 +59,7 @@ axios.interceptors.response.use(
       // Nếu không phải lỗi 401 hoặc không thể refresh, trả về lỗi gốc
       return Promise.reject(error);
     }
-  );
+);
 
 // Xử lý error response
 // _axiosInternal.interceptors.response.use(
@@ -84,6 +93,10 @@ const _put = async <T>(path: string, body: any, config?: AxiosRequestConfig) => 
 const _delete = async <T>(path: string, config?: AxiosRequestConfig) => {
     const resp = await repoAxiosInternalInstance.delete<ResponseBase<T>>(path, config);
     return resp.data;
+}
+const _refreshTokenApi = async (refreshToken: string) => {
+  const resp = await _post<LoginResponse>(`/auth/api/Account/RefreshToken`, { refreshToken });
+  return resp;
 }
 
 const repoAxiosInternalMethod = {

@@ -7,4 +7,10 @@ module.exports = {
   parserOptions: {
     project: true,
   },
+  plugins: [
+    'react-hooks',
+  ],
+  rules: {
+    'react-hooks/exhaustive-deps': 'warn',  // Cảnh báo khi thiếu dependencies trong useEffect
+  },
 };

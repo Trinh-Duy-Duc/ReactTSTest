@@ -1,11 +1,11 @@
 {
   "private": true,
   "scripts": {
-    "build": "turbo run build", 
+    "build": "turbo run build",
     "build:edu-enroll": "turbo run build --filter=edu-enroll",
     "dev": "turbo run dev",
     "dev:edu-enroll": "npx turbo run dev --filter=packages/* & turbo run dev --filter=edu-enroll",
-    "build:edu-enroll-beta": "NODE_ENV=beta & npx turbo run build --filter=edu-enroll",
+    "build:edu-enroll-beta": "set NODE_ENV=beta & npx turbo run build --filter=edu-enroll",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
@@ -31,6 +31,7 @@
     "i18next": "^24.2.3",
     "i18next-browser-languagedetector": "^8.0.4",
     "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
     "path": "^0.12.7",
     "react-hook-form": "^7.55.0",
     "react-i18next": "^15.4.1",

@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "@repo/utils": "*",
-    "@repo/store": "*"
+    "@repo/store": "*",
+    "@repo/types": "*"
   }
 }

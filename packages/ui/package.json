@@ -33,10 +33,13 @@
     "@repo/store": "*",
     "@repo/types": "*",
     "@repo/utils": "*",
+    "@repo/hooks": "*",
+    "@repo/services": "*",
     "eslint": "^8.57.0",
     "typescript": "5.5.4",
     "postcss": "^8.5.3",
     "autoprefixer": "^10.4.20",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^3.4.17",
+    "eslint-plugin-react-hooks": "^5.1.0"
   }
 }

@@ -24,7 +24,7 @@ export function LanguageWrapper() {
       return;
     }
     setLang(lang!);
-  }, [lang, setLang]);
+  }, [lang]);
 
   return (
     <Outlet />
