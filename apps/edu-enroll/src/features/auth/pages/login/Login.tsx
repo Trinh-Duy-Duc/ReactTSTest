@@ -1,38 +1,26 @@
 import EE_CONSTANT from "@edu-enroll/constant";
-import { useAuth, usePaginationParams } from "@repo/hooks";
+import { useAuth, useI18nRepo, usePaginationParams } from "@repo/hooks";
 import { useI18nStore } from "@repo/store/i18n";
 import { useToastify } from "@repo/store/toastify";
 import { LanguageCode } from "@repo/types/enum";
 import { ButtonBasic } from '@repo/ui/antd-ui';
 import { Button, DatePicker } from 'antd';
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { t } = useTranslation(EE_CONSTANT.TRANS_KEYS.common, { keyPrefix: EE_CONSTANT.TRAN_KEYS_PREFIX.login } );
   const { t: t2 } = useTranslation(EE_CONSTANT.TRANS_KEYS.common);
   const { lang } = useI18nStore();
-  const location = useLocation();
-  const navigate = useNavigate();
   const { showToast } = useToastify();
   const { pageIndex, pageSize, setPageIndex, setPageSize } = usePaginationParams({ defaultPageIndex: 1, defaultPageSize: 50 });
   // const { login, handleRefreshToken } = useAuthStore();
   const { handleLogin } = useAuth();
-
-  useEffect(() => {
-    console.log('init')
-  }, [pageIndex, pageSize])
+  const { handleChangeLang } = useI18nRepo();
 
   const changeLang = () => {
     const newLang = lang === LanguageCode.English ? LanguageCode.VietNam :  LanguageCode.English;
-    // Regex này tìm chuỗi bắt đầu bằng "/" theo sau là 2 ký tự chữ thường, rồi có thể có "/" hoặc kết thúc chuỗi.
-    const newPathname = location.pathname.replace(/^\/[a-z]{2}(\/|$)/, `/${newLang}$1`);
-    // Nối thêm query string và hash nếu có
-    const newUrl = newPathname + location.search + location.hash;
-
-    // Sử dụng navigate để chuyển đến đường dẫn mới.
-    navigate(newUrl, { replace: true });
+    
+    handleChangeLang(newLang);
   }
 
   const handleDynamicTrans = () => {
