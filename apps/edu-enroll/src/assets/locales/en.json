@@ -3,6 +3,87 @@
     "login": {
       "title": "Login Page",
       "greeting": "Hello {{name}}, congratulations on your successful login!"
+    },
+    "register": {
+      "title": "Create Account",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "submitButton": "Register",
+      "loginLink": "Already have an account? Log in",
+      "successMessage": "Registration successful!"
+    },
+    "validation": {
+      "email": {
+        "required": "Email is required",
+        "invalid": "Please enter a valid email"
+      },
+      "password": {
+        "required": "Password is required",
+        "minLength": "Password must be at least 8 characters",
+        "uppercase": "Password must contain at least one uppercase letter",
+        "lowercase": "Password must contain at least one lowercase letter",
+        "number": "Password must contain at least one number"
+      },
+      "confirmPassword": {
+        "required": "Please confirm your password",
+        "match": "Passwords do not match"
+      }
+    }
+  },
+  "home": {
+    "welcomeMessage": "Welcome to the educational enrollment platform",
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Go to Dashboard",
+    "features": {
+      "courses": "Explore Courses",
+      "coursesDesc": "Browse through our catalog of courses and find the ones that suit your needs.",
+      "enroll": "Easy Enrollment",
+      "enrollDesc": "Simple and straightforward enrollment process for all courses.",
+      "track": "Track Progress",
+      "trackDesc": "Monitor your learning journey with detailed progress tracking."
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Hello",
+    "content": "Dashboard Content",
+    "description": "This is the dashboard of the Edu Enroll system. You can manage your courses and personal information here.",
+    "logoutConfirm": "Are you sure you want to log out?",
+    "logoutSuccess": "Logged out successfully",
+    "menu": {
+      "products": "Products",
+      "productsDesc": "Manage product listing",
+      "orders": "Orders",
+      "ordersDesc": "Manage order listing"
+    }
+  },
+  "products": {
+    "title": "Products",
+    "filters": {
+      "title": "Filters",
+      "showFilters": "Show Filters",
+      "titlePlaceholder": "Search by product name",
+      "category": "Category",
+      "categoryPlaceholder": "Select category",
+      "minPrice": "Min Price",
+      "minPricePlaceholder": "Min",
+      "maxPrice": "Max Price",
+      "maxPricePlaceholder": "Max",
+      "filter": "Filter",
+      "reset": "Reset"
+    },
+    "table": {
+      "image": "Image",
+      "title": "Product",
+      "price": "Price",
+      "description": "Description",
+      "actions": "Actions",
+      "view": "View"
+    },
+    "pagination": {
+      "total": "Total {total} items"
     }
   }
 }

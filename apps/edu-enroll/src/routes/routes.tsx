@@ -1,17 +1,14 @@
-// import Login from '@edu-enroll/features/auth/pages/login/Login';
-// import Register from '@edu-enroll/features/auth/pages/register/Register';
-import Dashboard from '@edu-enroll/features/dashboard/pages/dashboard/Dashboard';
 import { LanguageWrapper } from '@repo/ui/wrapper';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { ProtectedRoute } from './ProtectedRoute';
 import { PublicRoute } from './PublicRoute';
-import EE_CONSTANT from '@edu-enroll/constant';
+import EE_CONSTANT from '../constant';
 import { lazy } from 'react';
-// import { Login } from '@edu-enroll/features/auth';
 
 // Lazy load components
-const Login = lazy(() => import('@edu-enroll/features/auth/pages/login/Login'));
-const Register = lazy(() => import('@edu-enroll/features/auth/pages/register/Register'));
+const Login = lazy(() => import('../features/auth/pages/login/Login'));
+const Register = lazy(() => import('../features/auth/pages/register/Register'));
+const Dashboard = lazy(() => import('../features/dashboard/pages/dashboard/Dashboard'));
+const Product = lazy(() => import('../features/product/pages/product'));
 
 const _route = EE_CONSTANT.ROUTE;
 
@@ -20,16 +17,24 @@ const AppRoutes = () => {
     <BrowserRouter>
         <Routes>
             <Route path="/:lang/*" element={<LanguageWrapper />} >
+                {/* Redirect root path to login with query parameters */}
+                <Route index element={<Navigate to="login?pageIndex=1&pageSize=50" replace />} />
+                
                 <Route element={<PublicRoute />}>
                     <Route path="login" element={<Login />} />
                     <Route path="register" element={<Register />} />
                 </Route>
-                <Route element={<ProtectedRoute />}>
-                    <Route path="dashboard" element={<Dashboard />} />
-                </Route>
-                <Route path="*" element={<Navigate to={_route.fallBackInside} replace />} />
+                
+                {/* Dashboard route */}
+                <Route path="dashboard" element={<Dashboard />} />
+                
+                {/* Product management route */}
+                <Route path="products" element={<Product />} />
+                
+                {/* Catch all other routes and redirect to login */}
+                <Route path="*" element={<Navigate to={`${_route.fallBackInside}/login?pageIndex=1&pageSize=50`} replace />} />
             </Route>
-            <Route path="*" element={<Navigate to={_route.fallBackRoot} replace />} />
+            <Route path="*" element={<Navigate to={`${_route.fallBackRoot}/login?pageIndex=1&pageSize=50`} replace />} />
         </Routes>
     </BrowserRouter>
   )

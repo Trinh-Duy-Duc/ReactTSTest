@@ -1,3 +1,3 @@
-export * from './pagination';
 export * from './auth';
-export * from './i18n'
+export * from './i18n';
+export * from './pagination';

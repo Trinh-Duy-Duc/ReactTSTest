@@ -3,6 +3,88 @@
     "login": {
       "title": "Trang đăng nhập",
       "greeting": "Xin chào {{name}}, chúc mừng bạn đã đăng nhập thành công!"
+    },
+    "register": {
+      "title": "Đăng ký tài khoản",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "confirmPassword": "Xác nhận mật khẩu",
+      "submitButton": "Đăng ký",
+      "loginLink": "Đã có tài khoản? Đăng nhập ngay",
+      "successMessage": "Đăng ký thành công!"
+    },
+    "validation": {
+      "email": {
+        "required": "Vui lòng nhập email",
+        "invalid": "Email không hợp lệ"
+      },
+      "password": {
+        "required": "Vui lòng nhập mật khẩu",
+        "minLength": "Mật khẩu phải có ít nhất 8 ký tự",
+        "uppercase": "Mật khẩu phải chứa ít nhất một chữ cái viết hoa",
+        "lowercase": "Mật khẩu phải chứa ít nhất một chữ cái viết thường",
+        "number": "Mật khẩu phải chứa ít nhất một số"
+      },
+      "confirmPassword": {
+        "required": "Vui lòng xác nhận mật khẩu",
+        "match": "Mật khẩu xác nhận không khớp"
+      }
+    }
+  },
+  "home": {
+    "welcomeMessage": "Chào mừng đến với nền tảng đăng ký học tập",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "dashboard": "Đi đến Bảng điều khiển",
+    "features": {
+      "courses": "Khám phá khóa học",
+      "coursesDesc": "Duyệt qua danh mục các khóa học và tìm những khóa học phù hợp với nhu cầu của bạn.",
+      "enroll": "Đăng ký dễ dàng",
+      "enrollDesc": "Quy trình đăng ký đơn giản và dễ dàng cho tất cả các khóa học.",
+      "track": "Theo dõi tiến độ",
+      "trackDesc": "Giám sát hành trình học tập của bạn với việc theo dõi tiến độ chi tiết."
+    }
+  },
+  "dashboard": {
+    "title": "Bảng điều khiển",
+    "welcome": "Xin chào",
+    "content": "Nội dung Bảng điều khiển",
+    "description": "Đây là trang bảng điều khiển của hệ thống Edu Enroll. Bạn có thể quản lý các khóa học và thông tin cá nhân tại đây.",
+    "logoutConfirm": "Bạn có chắc chắn muốn đăng xuất?",
+    "logoutSuccess": "Đăng xuất thành công",
+    "logout": "Đăng xuất",
+    "menu": {
+      "products": "Sản phẩm",
+      "productsDesc": "Quản lý danh sách sản phẩm",
+      "orders": "Đơn hàng",
+      "ordersDesc": "Quản lý đơn đặt hàng"
+    }
+  },
+  "products": {
+    "title": "Sản phẩm",
+    "filters": {
+      "title": "Bộ lọc",
+      "showFilters": "Hiển thị bộ lọc",
+      "titlePlaceholder": "Tìm theo tên sản phẩm",
+      "category": "Danh mục",
+      "categoryPlaceholder": "Chọn danh mục",
+      "minPrice": "Giá thấp nhất",
+      "minPricePlaceholder": "Thấp nhất",
+      "maxPrice": "Giá cao nhất",
+      "maxPricePlaceholder": "Cao nhất",
+      "filter": "Lọc",
+      "reset": "Làm mới"
+    },
+    "table": {
+      "image": "Hình ảnh",
+      "title": "Sản phẩm",
+      "price": "Giá",
+      "description": "Mô tả",
+      "actions": "Thao tác",
+      "view": "Xem"
+    },
+    "pagination": {
+      "total": "Tổng {total} sản phẩm"
     }
   }
 }

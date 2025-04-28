@@ -2,7 +2,8 @@ import REPO_CONSTANT from '@repo/utils/constant';
 
 const ROUTE = {
     fallBackRoot: `/${REPO_CONSTANT.DEFAUL_VALUES.language}`,
-    fallBackInside: `/${REPO_CONSTANT.DEFAUL_VALUES.language}/login`,
+    fallBackInside: `/${REPO_CONSTANT.DEFAUL_VALUES.language}`,
+    defaultLoginParams: '?pageIndex=1&pageSize=50'
 }
 
 const TRAN_KEYS_PREFIX = {
