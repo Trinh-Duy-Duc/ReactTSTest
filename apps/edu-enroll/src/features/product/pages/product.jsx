@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Table, Button, Space, Modal, Form, Input, InputNumber, message, Popconfirm, Image, Spin, Select, Card, Row, Col, Divider, Tooltip, Typography, Upload } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined, ExclamationCircleOutlined, SearchOutlined, FilterOutlined, TagsOutlined, DollarOutlined, ClearOutlined, AppstoreOutlined, UploadOutlined, LoadingOutlined, PictureOutlined } from '@ant-design/icons';
+import { Table, Button, Space, Modal, Form, Input, InputNumber, message, Popconfirm, Image, Spin, Select, Card, Row, Col, Divider, Tooltip, Typography } from 'antd';
+import { EditOutlined, DeleteOutlined, PlusOutlined, ExclamationCircleOutlined, SearchOutlined, FilterOutlined, TagsOutlined, DollarOutlined, ClearOutlined, AppstoreOutlined, LinkOutlined, PictureOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import { productApi } from '../api';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useParams } from 'react-router-dom';
 import { usePaginationParams } from '@repo/hooks';
+import { LanguageSwitcher } from '../../../components/ui/LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 
@@ -15,8 +17,8 @@ const Product = () => {
   const [form] = Form.useForm();
   const [searchParams, setSearchParams] = useSearchParams();
   const [categories, setCategories] = useState([]);
-  const [imageLoading, setImageLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(null);
+  const { t } = useTranslation();
+  const { lang } = useParams();
 
   // State cho bộ lọc
   const [filters, setFilters] = useState({
@@ -74,7 +76,7 @@ const Product = () => {
       setCategories(data);
     } catch (error) {
       console.error('Failed to fetch categories:', error);
-      message.error('Không thể tải danh sách danh mục');
+      message.error(t('error.fetchCategories'));
     }
   };
 
@@ -128,7 +130,7 @@ const Product = () => {
       setTotalItems(total);
     } catch (error) {
       console.error('Failed to fetch products:', error);
-      message.error('Không thể tải danh sách sản phẩm');
+      message.error(t('error.fetchProducts'));
     } finally {
       setLoading(false);
     }
@@ -170,29 +172,60 @@ const Product = () => {
     try {
       const values = await form.validateFields();
       
-      // Đảm bảo images là một mảng
-      const images = values.images ? [values.images] : ['https://placehold.co/600x400'];
+      // Ensure we have required fields with proper formatting
+      if (!values.title || values.title.trim().length < 3) {
+        message.error('Title must be at least 3 characters long');
+        return;
+      }
+      
+      if (!values.description || values.description.trim().length < 10) {
+        values.description = `${values.title} - This is a detailed description of at least 10 characters.`;
+      }
+      
+      // Make sure price is a valid number
+      const price = typeof values.price === 'string' ? parseFloat(values.price) : values.price;
+      if (isNaN(price) || price <= 0) {
+        message.error('Price must be a positive number');
+        return;
+      }
+      
+      // Always use a valid image URL
+      const imageUrl = values.images && values.images.trim() 
+        ? values.images.trim() 
+        : 'https://placehold.co/600x400';
+      
+      // Build the minimal required payload according to API docs
+      const payload = {
+        title: values.title.trim(),
+        price: price,
+        description: values.description.trim(),
+        categoryId: Number(values.categoryId),
+        images: [imageUrl]
+      };
+      
+      console.log('Sending product data:', payload);
       
       if (editingProduct) {
-        // Cập nhật sản phẩm
-        await productApi.updateProduct(editingProduct.id, {
-          ...values,
-          images
-        });
-        message.success('Cập nhật sản phẩm thành công');
+        // Update existing product
+        await productApi.updateProduct(editingProduct.id, payload);
+        message.success(t('success.updateProduct'));
       } else {
-        // Thêm sản phẩm mới
-        await productApi.createProduct({
-          ...values,
-          images
-        });
-        message.success('Thêm sản phẩm mới thành công');
+        // Create new product
+        await productApi.createProduct(payload);
+        message.success(t('success.addProduct'));
       }
       
       setModalVisible(false);
       fetchProducts();
     } catch (error) {
       console.error('Form validation failed:', error);
+      // Log detailed error information to help diagnose the issue
+      if (error.response) {
+        console.error('API Error Response:', error.response.data);
+        message.error(`API Error: ${JSON.stringify(error.response.data)}`);
+      } else {
+        message.error(`Error: ${error.message || 'Unknown error occurred'}`);
+      }
     }
   };
 
@@ -200,56 +233,12 @@ const Product = () => {
   const handleDelete = async (id) => {
     try {
       await productApi.deleteProduct(id);
-      message.success('Xóa sản phẩm thành công');
+      message.success(t('success.deleteProduct'));
       fetchProducts();
     } catch (error) {
       console.error('Failed to delete product:', error);
-      message.error('Không thể xóa sản phẩm');
+      message.error(t('error.deleteProduct'));
     }
-  };
-
-  // Xử lý tải lên hình ảnh
-  const getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-  };
-
-  const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('Bạn chỉ có thể tải lên file JPG/PNG!');
-      return false;
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('Kích thước ảnh phải nhỏ hơn 2MB!');
-      return false;
-    }
-    return isJpgOrPng && isLt2M;
-  };
-
-  const handleImageChange = (info) => {
-    if (info.file.status === 'uploading') {
-      setImageLoading(true);
-      return;
-    }
-    
-    if (info.file.status === 'done') {
-      // Đối với demo, ta xử lý base64 của hình ảnh
-      getBase64(info.file.originFileObj, (url) => {
-        setImageLoading(false);
-        setImageUrl(url);
-        form.setFieldsValue({ images: url });
-      });
-    }
-  };
-
-  // Custom upload request để không gửi lên server mặc định
-  const customUploadRequest = ({ onSuccess }) => {
-    setTimeout(() => {
-      onSuccess("ok");
-    }, 0);
   };
 
   // Định nghĩa các cột của bảng
@@ -261,7 +250,7 @@ const Product = () => {
       width: 60
     },
     {
-      title: 'Hình ảnh',
+      title: t('table.image'),
       dataIndex: 'images',
       key: 'images',
       render: (images) => (
@@ -275,18 +264,18 @@ const Product = () => {
       )
     },
     {
-      title: 'Tên sản phẩm',
+      title: t('table.title'),
       dataIndex: 'title',
       key: 'title'
     },
     {
-      title: 'Giá',
+      title: t('table.price'),
       dataIndex: 'price',
       key: 'price',
       render: (price) => `$${price}`
     },
     {
-      title: 'Danh mục',
+      title: t('table.category'),
       dataIndex: 'category',
       key: 'category',
       render: (_, record) => {
@@ -306,11 +295,11 @@ const Product = () => {
         }
         
         // Trường hợp không có thông tin category
-        return <span className="text-gray-400">Chưa phân loại</span>;
+        return <span className="text-gray-400">{t('table.noCategory')}</span>;
       }
     },
     {
-      title: 'Hành động',
+      title: t('table.action'),
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
@@ -319,17 +308,17 @@ const Product = () => {
             icon={<EditOutlined />} 
             onClick={() => handleEdit(record)}
           >
-            Sửa
+            {t('action.edit')}
           </Button>
           <Popconfirm
-            title="Bạn có chắc chắn muốn xóa sản phẩm này?"
+            title={t('action.confirmDelete')}
             onConfirm={() => handleDelete(record.id)}
-            okText="Xóa"
-            cancelText="Hủy"
+            okText={t('action.delete')}
+            cancelText={t('action.cancel')}
             icon={<ExclamationCircleOutlined style={{ color: 'red' }} />}
           >
             <Button type="link" icon={<DeleteOutlined />} danger>
-              Xóa
+              {t('action.delete')}
             </Button>
           </Popconfirm>
         </Space>
@@ -340,7 +329,29 @@ const Product = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-4">
-        <Title level={2}>Quản lý Sản phẩm</Title>
+        <div></div> {/* Phần tử trống để giúp justify-between hoạt động đúng */}
+        {/* Language Switcher ở góc trên bên phải */}
+        <div className="mr-4 mb-2">
+          <LanguageSwitcher />
+        </div>
+      </div>
+
+      <div className="flex flex-col items-center mb-6">
+        <Title level={2} className="font-bold text-center mb-4">{t('title.productManagement')}</Title>
+        <Button 
+          type="primary"
+          icon={<ArrowLeftOutlined />}
+          style={{ 
+            borderRadius: '6px',
+            background: 'linear-gradient(to right, #722ed1, #531dab)',
+            border: 'none',
+            boxShadow: '0 2px 5px rgba(114, 46, 209, 0.3)',
+            alignSelf: 'flex-start'
+          }}
+          onClick={() => window.location.href = `http://localhost:5173/${lang}/dashboard`}
+        >
+          {t('action.backToDashboard')}
+        </Button>
       </div>
 
       {/* Phần bộ lọc */}
@@ -354,7 +365,7 @@ const Product = () => {
       >
         <div className="mb-2">
           <Title level={5} style={{ margin: 0 }}>
-            <FilterOutlined style={{ marginRight: 8 }} /> Bộ lọc sản phẩm
+            <FilterOutlined style={{ marginRight: 8 }} /> {t('filter.title')}
           </Title>
           <Divider style={{ margin: '12px 0' }} />
         </div>
@@ -369,9 +380,9 @@ const Product = () => {
         >
           <Row gutter={[24, 16]} align="middle">
             <Col xs={24} sm={12} md={5} lg={5}>
-              <Form.Item name="title" label={<span className="filter-label"><TagsOutlined /> Tên sản phẩm</span>} className="mb-0">
+              <Form.Item name="title" label={<span className="filter-label"><TagsOutlined /> {t('filter.productName')}</span>} className="mb-0">
                 <Input 
-                  placeholder="Tìm theo tên sản phẩm" 
+                  placeholder={t('filter.productNamePlaceholder')} 
                   allowClear 
                   prefix={<SearchOutlined style={{ color: '#1890ff' }} />}
                   style={{ borderRadius: '6px' }}
@@ -380,9 +391,9 @@ const Product = () => {
               </Form.Item>
             </Col>
             <Col xs={24} sm={12} md={5} lg={5}>
-              <Form.Item name="categoryId" label={<span className="filter-label"><AppstoreOutlined /> Danh mục</span>} className="mb-0">
+              <Form.Item name="categoryId" label={<span className="filter-label"><AppstoreOutlined /> {t('filter.category')}</span>} className="mb-0">
                 <Select
-                  placeholder="Chọn danh mục"
+                  placeholder={t('filter.categoryPlaceholder')}
                   allowClear
                   style={{ borderRadius: '6px' }}
                   className="hover:border-blue-400"
@@ -395,10 +406,10 @@ const Product = () => {
               </Form.Item>
             </Col>
             <Col xs={24} sm={12} md={3} lg={3}>
-              <Form.Item name="priceMin" label={<span className="filter-label"><DollarOutlined /> Giá từ</span>} className="mb-0">
+              <Form.Item name="priceMin" label={<span className="filter-label"><DollarOutlined /> {t('filter.priceFrom')}</span>} className="mb-0">
                 <InputNumber
                   style={{ width: '100%', borderRadius: '6px' }}
-                  placeholder="Min"
+                  placeholder={t('filter.priceMinPlaceholder')}
                   min={0}
                   className="hover:border-blue-400"
                   formatter={(value) => `$${value}`}
@@ -407,10 +418,10 @@ const Product = () => {
               </Form.Item>
             </Col>
             <Col xs={24} sm={12} md={3} lg={3}>
-              <Form.Item name="priceMax" label={<span className="filter-label"><DollarOutlined /> Đến</span>} className="mb-0">
+              <Form.Item name="priceMax" label={<span className="filter-label"><DollarOutlined /> {t('filter.priceTo')}</span>} className="mb-0">
                 <InputNumber
                   style={{ width: '100%', borderRadius: '6px' }}
-                  placeholder="Max"
+                  placeholder={t('filter.priceMaxPlaceholder')}
                   min={0}
                   className="hover:border-blue-400"
                   formatter={(value) => `$${value}`}
@@ -432,7 +443,7 @@ const Product = () => {
                       boxShadow: '0 2px 5px rgba(24, 144, 255, 0.3)'
                     }}
                   >
-                    Lọc sản phẩm
+                    {t('filter.apply')}
                   </Button>
                   <Button 
                     icon={<ClearOutlined />}
@@ -448,7 +459,7 @@ const Product = () => {
                       fetchProducts();
                     }}
                   >
-                    Xóa bộ lọc
+                    {t('filter.clear')}
                   </Button>
                 </Space>
               </Form.Item>
@@ -474,7 +485,7 @@ const Product = () => {
           }}
           className="hover:shadow-lg transition-all duration-300"
         >
-          Thêm sản phẩm
+          {t('action.addProduct')}
         </Button>
       </div>
 
@@ -494,7 +505,7 @@ const Product = () => {
             total: totalItems,
             showSizeChanger: true,
             pageSizeOptions: ['10', '20', '50'],
-            showTotal: (total) => `Tổng ${total} sản phẩm`,
+            showTotal: (total) => `${t('pagination.total')} ${total} ${t('pagination.products')}`,
             position: ['bottomCenter'],
             hideOnSinglePage: false,
             maxCount: totalPages || 1,    // Giới hạn số lượng nút phân trang hiển thị
@@ -513,16 +524,16 @@ const Product = () => {
         title={
           <div>
             {editingProduct ? (
-              <><EditOutlined style={{ marginRight: 8, color: '#1890ff' }} /> Chỉnh sửa sản phẩm</>
+              <><EditOutlined style={{ marginRight: 8, color: '#1890ff' }} /> {t('modal.editProduct')}</>
             ) : (
-              <><PlusOutlined style={{ marginRight: 8, color: '#52c41a' }} /> Thêm sản phẩm mới</>
+              <><PlusOutlined style={{ marginRight: 8, color: '#52c41a' }} /> {t('modal.addProduct')}</>
             )}
           </div>
         }
         onCancel={() => setModalVisible(false)}
         onOk={handleSubmit}
-        okText={editingProduct ? 'Cập nhật' : 'Thêm mới'}
-        cancelText="Hủy"
+        okText={editingProduct ? t('modal.update') : t('modal.add')}
+        cancelText={t('modal.cancel')}
         okButtonProps={{ 
           style: { 
             borderRadius: '6px',
@@ -539,11 +550,11 @@ const Product = () => {
             <Col span={24}>
               <Form.Item
                 name="title"
-                label={<span><TagsOutlined style={{ marginRight: 8 }} /> Tên sản phẩm</span>}
-                rules={[{ required: true, message: 'Vui lòng nhập tên sản phẩm' }]}
+                label={<span><TagsOutlined style={{ marginRight: 8 }} /> {t('form.productName')}</span>}
+                rules={[{ required: true, message: t('form.productNameRequired') }]}
               >
                 <Input 
-                  placeholder="Nhập tên sản phẩm" 
+                  placeholder={t('form.productNamePlaceholder')} 
                   style={{ borderRadius: '6px' }} 
                   className="hover:border-blue-400"
                 />
@@ -555,12 +566,12 @@ const Product = () => {
             <Col span={12}>
               <Form.Item
                 name="price"
-                label={<span><DollarOutlined style={{ marginRight: 8 }} /> Giá sản phẩm</span>}
-                rules={[{ required: true, message: 'Vui lòng nhập giá sản phẩm' }]}
+                label={<span><DollarOutlined style={{ marginRight: 8 }} /> {t('form.productPrice')}</span>}
+                rules={[{ required: true, message: t('form.productPriceRequired') }]}
               >
                 <InputNumber
                   style={{ width: '100%', borderRadius: '6px' }}
-                  placeholder="Giá sản phẩm"
+                  placeholder={t('form.productPricePlaceholder')}
                   min={0}
                   className="hover:border-blue-400"
                   formatter={(value) => `$${value}`}
@@ -571,11 +582,11 @@ const Product = () => {
             <Col span={12}>
               <Form.Item
                 name="categoryId"
-                label={<span><AppstoreOutlined style={{ marginRight: 8 }} /> Danh mục</span>}
-                rules={[{ required: true, message: 'Vui lòng chọn danh mục' }]}
+                label={<span><AppstoreOutlined style={{ marginRight: 8 }} /> {t('form.productCategory')}</span>}
+                rules={[{ required: true, message: t('form.productCategoryRequired') }]}
               >
                 <Select
-                  placeholder="Chọn danh mục sản phẩm"
+                  placeholder={t('form.productCategoryPlaceholder')}
                   style={{ width: '100%', borderRadius: '6px' }}
                   className="hover:border-blue-400"
                   options={categories.map(cat => ({
@@ -590,10 +601,10 @@ const Product = () => {
 
           <Form.Item
             name="description"
-            label="Mô tả sản phẩm"
+            label={t('form.productDescription')}
           >
             <Input.TextArea 
-              placeholder="Nhập mô tả chi tiết về sản phẩm" 
+              placeholder={t('form.productDescriptionPlaceholder')} 
               rows={4} 
               style={{ borderRadius: '6px' }}
               className="hover:border-blue-400" 
@@ -602,26 +613,13 @@ const Product = () => {
 
           <Form.Item
             name="images"
-            label="Hình ảnh sản phẩm"
+            label={<span><LinkOutlined style={{ marginRight: 8 }} /> {t('form.productImage')}</span>}
           >
-            <Upload
-              name="avatar"
-              listType="picture-card"
-              className="avatar-uploader"
-              showUploadList={false}
-              beforeUpload={beforeUpload}
-              onChange={handleImageChange}
-              customRequest={customUploadRequest}
-            >
-              {imageUrl ? (
-                <img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
-              ) : (
-                <div>
-                  {imageLoading ? <LoadingOutlined /> : <UploadOutlined />}
-                  <div style={{ marginTop: 8 }}>Tải lên</div>
-                </div>
-              )}
-            </Upload>
+            <Input 
+              placeholder={t('form.productImagePlaceholder')} 
+              style={{ borderRadius: '6px' }} 
+              className="hover:border-blue-400"
+            />
           </Form.Item>
         </Form>
       </Modal>

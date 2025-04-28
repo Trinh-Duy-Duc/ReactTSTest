@@ -9,6 +9,7 @@ export interface Product {
   description: string;
   categoryId?: number;
   images: string[];
+  slug?: string;
 }
 
 export interface ProductUpdatePayload {

@@ -60,6 +60,78 @@
       "ordersDesc": "Quản lý đơn đặt hàng"
     }
   },
+  "title": {
+    "productManagement": "Quản lý Sản phẩm"
+  },
+  "action": {
+    "backToDashboard": "Quay lại Dashboard",
+    "edit": "Sửa",
+    "delete": "Xóa",
+    "cancel": "Hủy",
+    "addProduct": "Thêm sản phẩm", 
+    "confirmDelete": "Bạn có chắc chắn muốn xóa sản phẩm này?"
+  },
+  "filter": {
+    "title": "Bộ lọc sản phẩm",
+    "productName": "Tên sản phẩm",
+    "productNamePlaceholder": "Tìm theo tên sản phẩm",
+    "category": "Danh mục",
+    "categoryPlaceholder": "Chọn danh mục",
+    "priceFrom": "Giá từ",
+    "priceTo": "Đến",
+    "priceMinPlaceholder": "Min",
+    "priceMaxPlaceholder": "Max",
+    "apply": "Lọc sản phẩm",
+    "clear": "Xóa bộ lọc"
+  },
+  "table": {
+    "image": "Hình ảnh",
+    "title": "Tên sản phẩm",
+    "price": "Giá",
+    "category": "Danh mục",
+    "action": "Hành động",
+    "noCategory": "Chưa phân loại"
+  },
+  "pagination": {
+    "total": "Tổng",
+    "products": "sản phẩm"
+  },
+  "modal": {
+    "editProduct": "Chỉnh sửa sản phẩm",
+    "addProduct": "Thêm sản phẩm mới",
+    "update": "Cập nhật",
+    "add": "Thêm mới",
+    "cancel": "Hủy"
+  },
+  "form": {
+    "productName": "Tên sản phẩm",
+    "productNameRequired": "Vui lòng nhập tên sản phẩm",
+    "productNamePlaceholder": "Nhập tên sản phẩm",
+    "productPrice": "Giá sản phẩm",
+    "productPriceRequired": "Vui lòng nhập giá sản phẩm",
+    "productPricePlaceholder": "Nhập giá sản phẩm",
+    "productCategory": "Danh mục",
+    "productCategoryRequired": "Vui lòng chọn danh mục",
+    "productCategoryPlaceholder": "Chọn danh mục sản phẩm",
+    "productDescription": "Mô tả sản phẩm",
+    "productDescriptionPlaceholder": "Nhập mô tả chi tiết về sản phẩm",
+    "productImage": "Hình ảnh sản phẩm",
+    "productImageRequired": "Vui lòng nhập URL hình ảnh",
+    "productImagePlaceholder": "Nhập URL hình ảnh",
+    "upload": "Tải lên"
+  },
+  "success": {
+    "addProduct": "Thêm sản phẩm mới thành công",
+    "updateProduct": "Cập nhật sản phẩm thành công",
+    "deleteProduct": "Xóa sản phẩm thành công"
+  },
+  "error": {
+    "fetchProducts": "Không thể tải danh sách sản phẩm",
+    "fetchCategories": "Không thể tải danh sách danh mục",
+    "deleteProduct": "Không thể xóa sản phẩm",
+    "uploadFormat": "Chỉ có thể tải lên file JPG/PNG!",
+    "uploadSize": "Hình ảnh phải nhỏ hơn 2MB!"
+  },
   "products": {
     "title": "Sản phẩm",
     "filters": {

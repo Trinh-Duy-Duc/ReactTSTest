@@ -52,12 +52,85 @@
     "description": "This is the dashboard of the Edu Enroll system. You can manage your courses and personal information here.",
     "logoutConfirm": "Are you sure you want to log out?",
     "logoutSuccess": "Logged out successfully",
+    "logout": "Log out",
     "menu": {
       "products": "Products",
       "productsDesc": "Manage product listing",
       "orders": "Orders",
       "ordersDesc": "Manage order listing"
     }
+  },
+  "title": {
+    "productManagement": "Product Management"
+  },
+  "action": {
+    "backToDashboard": "Back to Dashboard",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "addProduct": "Add Product", 
+    "confirmDelete": "Are you sure you want to delete this product?"
+  },
+  "filter": {
+    "title": "Filter Products",
+    "productName": "Product Name",
+    "productNamePlaceholder": "Search by name",
+    "category": "Category",
+    "categoryPlaceholder": "Select category",
+    "priceFrom": "Min Price",
+    "priceTo": "Max Price",
+    "priceMinPlaceholder": "Min",
+    "priceMaxPlaceholder": "Max",
+    "apply": "Filter",
+    "clear": "Clear Filters"
+  },
+  "table": {
+    "image": "Image",
+    "title": "Product",
+    "price": "Price",
+    "category": "Category",
+    "action": "Actions",
+    "noCategory": "Uncategorized"
+  },
+  "pagination": {
+    "total": "Total",
+    "products": "products"
+  },
+  "modal": {
+    "editProduct": "Edit Product",
+    "addProduct": "Add New Product",
+    "update": "Update",
+    "add": "Add",
+    "cancel": "Cancel"
+  },
+  "form": {
+    "productName": "Product Name",
+    "productNameRequired": "Please enter product name",
+    "productNamePlaceholder": "Enter product name",
+    "productPrice": "Product Price",
+    "productPriceRequired": "Please enter product price",
+    "productPricePlaceholder": "Enter price",
+    "productCategory": "Category",
+    "productCategoryRequired": "Please select a category",
+    "productCategoryPlaceholder": "Select product category",
+    "productDescription": "Product Description",
+    "productDescriptionPlaceholder": "Enter detailed product description",
+    "productImage": "Product Image",
+    "productImageRequired": "Please enter product image URL",
+    "productImagePlaceholder": "Enter image URL",
+    "upload": "Upload"
+  },
+  "success": {
+    "addProduct": "Product added successfully",
+    "updateProduct": "Product updated successfully",
+    "deleteProduct": "Product deleted successfully"
+  },
+  "error": {
+    "fetchProducts": "Could not load product list",
+    "fetchCategories": "Could not load categories list",
+    "deleteProduct": "Could not delete product",
+    "uploadFormat": "You can only upload JPG/PNG files!",
+    "uploadSize": "Image must be smaller than 2MB!"
   },
   "products": {
     "title": "Products",

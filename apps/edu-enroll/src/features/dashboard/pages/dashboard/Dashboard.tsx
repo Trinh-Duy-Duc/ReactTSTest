@@ -6,6 +6,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button, Card } from "antd";
 import { ShoppingOutlined } from "@ant-design/icons";
+import { LanguageSwitcher } from "../../../../components/ui/LanguageSwitcher";
 
 const Dashboard = () => {
   const { t } = useTranslation();
@@ -31,6 +32,11 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6 flex flex-col">
       <div className="flex justify-end items-center space-x-4 mb-4">
+        {/* Language Switcher */}
+        <div className="mr-4">
+          <LanguageSwitcher />
+        </div>
+        
         {user && (
           <div className="flex items-center">
             <span className="text-gray-700 font-medium">
@@ -57,22 +63,21 @@ const Dashboard = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card
-              title="Quản lý Sản phẩm"
+              title={t('dashboard.menu.products', 'Quản lý Sản phẩm')}
               bordered={true}
               hoverable
               className="shadow-sm"
             >
-              <p className="mb-4">Quản lý danh sách sản phẩm với các chức năng thêm, sửa, xóa.</p>
+              <p className="mb-4">{t('dashboard.menu.productsDesc', 'Quản lý danh sách sản phẩm với các chức năng thêm, sửa, xóa.')}</p>
               <Link to={`/${lang}/products`}>
                 <Button type="primary" icon={<ShoppingOutlined />}>
-                  Quản lý Sản phẩm
+                  {t('dashboard.menu.products', 'Quản lý Sản phẩm')}
                 </Button>
               </Link>
             </Card>
           </div>
         </div>
       </div>     
-     
     </div>      
   )
 }
